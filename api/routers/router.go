@@ -8,12 +8,15 @@
 package routers
 
 import (
+	"fmt"
+
 	"hkllzh.com/easy-bill/api/controllers"
 
 	"github.com/astaxie/beego"
 )
 
 func init() {
+	fmt.Println("package routers func init() {")
 	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/object",
 			beego.NSInclude(

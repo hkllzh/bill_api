@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"hkllzh.com/easy-bill/api/models"
 	"encoding/json"
+
+	"hkllzh.com/easy-bill/api/models"
 
 	"github.com/astaxie/beego"
 )
@@ -42,6 +43,17 @@ func (o *ObjectController) Get() {
 			o.Data["json"] = ob
 		}
 	}
+	o.ServeJSON()
+}
+
+// @Title Get1
+// @Description find object by objectid
+// @Success 200 {object} models.Object
+// @Failure 403 :objectId is empty
+// @router /1 [get]
+func (o *ObjectController) Get1() {
+	obs := models.GetAll()
+	o.Data["json"] = obs
 	o.ServeJSON()
 }
 
@@ -89,4 +101,3 @@ func (o *ObjectController) Delete() {
 	o.Data["json"] = "delete success!"
 	o.ServeJSON()
 }
-
