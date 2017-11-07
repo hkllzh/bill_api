@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "hkllzh.com/easy-bill/api/db"
 	_ "hkllzh.com/easy-bill/api/routers"
 
 	"github.com/astaxie/beego"

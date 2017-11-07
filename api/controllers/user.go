@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"hkllzh.com/easy-bill/api/models"
 	"encoding/json"
+
+	"hkllzh.com/easy-bill/api/models"
 
 	"github.com/astaxie/beego"
 )
@@ -10,6 +11,23 @@ import (
 // Operations about Users
 type UserController struct {
 	beego.Controller
+}
+
+// @Title 注册用户
+// @Description 注册用户
+// @Param body body models.User true "用户信息"
+// @Success 200 {int} models.User.Id
+// @Failure 403 body is empty
+// @router /register [post]
+func (u *UserController) Register() {
+
+	var user models.User
+	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
+	uid := models.AddUser(user)
+	user.ID = uid
+	u.Data["json"] = map[string]interface{}{"uid": uid, "data": user}
+	u.ServeJSON()
+
 }
 
 // @Title CreateUser
@@ -116,4 +134,3 @@ func (u *UserController) Logout() {
 	u.Data["json"] = "logout success"
 	u.ServeJSON()
 }
-
