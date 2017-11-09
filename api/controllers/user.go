@@ -31,10 +31,10 @@ func (u *UserController) Register() {
 	o.Read(&user, "username")
 
 	if 0 == user.ID {
+		user.Token = cache.GetToken()
+		cache.PutUserToken(user)
 		user.Save()
 		u.Data["json"] = models.TrueData(user)
-		user.Token = "if 0 == user.ID {"
-		cache.PutUserToken(user)
 	} else {
 		u.Data["json"] = models.FalseData(1000, "账号已经已经注册")
 	}

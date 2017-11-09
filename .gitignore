@@ -19,4 +19,4 @@ api/swagger
 api/routers/commentsRouter______________________workspace_bill_bill_api_api_controllers.go
 *.tmp
 .idea/
-api/file_cache/
+api/.file_cache/
