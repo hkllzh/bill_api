@@ -17,6 +17,8 @@ func init() {
 	// register model
 	orm.RegisterModelWithPrefix("t_", new(User))
 
+	orm.Debug = true
+
 	// create table
-	orm.RunSyncdb("default", false, true)
+	// orm.RunSyncdb("default", false, true)
 }

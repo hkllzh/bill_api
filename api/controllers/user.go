@@ -6,6 +6,9 @@ import (
 	"hkllzh.com/easy-bill/api/models"
 
 	"github.com/astaxie/beego"
+	"hkllzh.com/easy-bill/api/db"
+	"fmt"
+	"github.com/astaxie/beego/orm"
 )
 
 // Operations about Users
@@ -23,9 +26,20 @@ func (u *UserController) Register() {
 
 	var user models.User
 	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
-	uid := models.AddUser(user)
-	user.ID = uid
-	u.Data["json"] = map[string]interface{}{"uid": uid, "data": user}
+
+	user4Query := db.User{Username: user.Username, Password: user.Password}
+	o := orm.NewOrm()
+	o.Read(&user4Query, "username")
+
+	if 0 == user4Query.ID {
+		user4Query.Save()
+		u.Data["json"] = models.TrueData(user4Query)
+	} else {
+		u.Data["json"] = models.FalseData(1000, "账号已经已经注册")
+	}
+
+	fmt.Println(user4Query)
+
 	u.ServeJSON()
 
 }
