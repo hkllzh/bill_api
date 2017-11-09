@@ -8,6 +8,7 @@ import (
 	"github.com/astaxie/beego"
 	"fmt"
 	"github.com/astaxie/beego/orm"
+	"hkllzh.com/easy-bill/api/cache"
 )
 
 // Operations about Users
@@ -32,6 +33,8 @@ func (u *UserController) Register() {
 	if 0 == user.ID {
 		user.Save()
 		u.Data["json"] = models.TrueData(user)
+		user.Token = "if 0 == user.ID {"
+		cache.PutUserToken(user)
 	} else {
 		u.Data["json"] = models.FalseData(1000, "账号已经已经注册")
 	}
