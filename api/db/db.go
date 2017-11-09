@@ -5,6 +5,7 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql" // import your used driver
+	"hkllzh.com/easy-bill/api/models"
 )
 
 func init() {
@@ -15,7 +16,8 @@ func init() {
 	orm.RegisterDataBase("default", "mysql", "easy_bill:pwd_easy_bill@tcp(121.196.217.69:3306)/easy_bill?charset=utf8", 30)
 
 	// register model
-	orm.RegisterModelWithPrefix("t_", new(User))
+	// 注册用户表
+	orm.RegisterModelWithPrefix("t_", new(models.User))
 
 	orm.Debug = true
 
