@@ -16,7 +16,7 @@ import (
 )
 
 func init() {
-	fmt.Println("package routers func init() {")
+	fmt.Println("路由初始化")
 	ns := beego.NewNamespace("/v1",
 		beego.NSNamespace("/user",
 			beego.NSInclude(

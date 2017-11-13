@@ -9,7 +9,6 @@ import (
 )
 
 func init() {
-	fmt.Println("package db func init() {")
 	fmt.Println("连接数据库")
 
 	// set default database

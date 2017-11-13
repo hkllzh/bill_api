@@ -5,7 +5,6 @@ import (
 
 	"hkllzh.com/easy-bill/api/models"
 
-	"github.com/astaxie/beego"
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"hkllzh.com/easy-bill/api/cache"
@@ -13,7 +12,7 @@ import (
 
 // Operations about Users
 type UserController struct {
-	beego.Controller
+	EasyBillBaseController
 }
 
 // @Title 注册用户
@@ -31,9 +30,12 @@ func (u *UserController) Register() {
 	o.Read(&user, "username")
 
 	if 0 == user.ID {
+
+		user.Save()
+
 		user.Token = cache.GetToken()
 		cache.PutUserToken(user)
-		user.Save()
+
 		u.Data["json"] = models.TrueData(user)
 	} else {
 		u.Data["json"] = models.FalseData(1000, "账号已经已经注册")
@@ -50,9 +52,11 @@ func (u *UserController) Register() {
 // @Param body body models.User true "用户信息"
 // @Success 200 {int} models.User.Id
 // @Failure 403 body is empty
-// @router /register [post]
+// @router /login [post]
 func (u *UserController) Login() {
 
+	fmt.Println("UserController -> Login")
+	fmt.Println(u.Ctx.Request.Header)
 }
 
 //// @Title CreateUser
