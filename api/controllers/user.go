@@ -54,9 +54,9 @@ func (u *UserController) Register() {
 
 // @Title 用户登录
 // @Description 用户登录
-// @Param body body models.User true "用户信息"
-// @Success 200 {int} models.User.Id
-// @Failure 403 body is empty
+// @Param loginInfo body controllers.UserRegisterParam true "登录信息"
+// @Success 0 {object} models.User
+// @Failure 10004 账号或密码错误
 // @router /login [post]
 func (u *UserController) Login() {
 	// 参数 转为 对象
