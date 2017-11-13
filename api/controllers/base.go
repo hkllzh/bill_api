@@ -7,6 +7,7 @@ import (
 	"strings"
 	"hkllzh.com/easy-bill/api/cache"
 	"strconv"
+	"encoding/json"
 )
 
 type EasyBillBaseController struct {
@@ -17,10 +18,18 @@ func (c *EasyBillBaseController) Prepare() {
 
 	// 需要鉴权 && 不通过
 	if needAuthUrlFilter(c) && !tokenAuth(c) {
-		c.Data["json"] = models.FalseData(10001, "验证不通过")
+		c.Data["json"] = models.FalseData(models.StatusAuthFailed)
 		c.ServeJSON()
 		c.StopRun()
 	}
+}
+
+func (c *EasyBillBaseController) SetData(data models.ReturnData) {
+	c.Data["json"] = data
+}
+
+func (c *EasyBillBaseController) GetParam(param interface{}) {
+	json.Unmarshal(c.Ctx.Input.RequestBody, param)
 }
 
 // 判断是否需要鉴权
@@ -28,6 +37,7 @@ func needAuthUrlFilter(c *EasyBillBaseController) bool {
 	url := c.Ctx.Request.URL.Path
 	notFilter := []string{
 		"/v1/user/register",
+		"/v1/user/login",
 	}
 	need := true
 	for i := 0; i < len(notFilter); i++ {

@@ -1,18 +1,22 @@
 package controllers
 
 import (
-	"encoding/json"
-
 	"hkllzh.com/easy-bill/api/models"
 
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"hkllzh.com/easy-bill/api/cache"
+	"github.com/astaxie/beego/logs"
 )
 
 // Operations about Users
 type UserController struct {
 	EasyBillBaseController
+}
+
+type UserRegisterParam struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 // @Title 注册用户
@@ -23,28 +27,29 @@ type UserController struct {
 // @router /register [post]
 func (u *UserController) Register() {
 
-	var user models.User
-	json.Unmarshal(u.Ctx.Input.RequestBody, &user)
+	var registerParam UserRegisterParam
+	u.GetParam(&registerParam)
 
+	user := models.User{}
+	user.Username = registerParam.Username
 	o := orm.NewOrm()
 	o.Read(&user, "username")
 
 	if 0 == user.ID {
-
+		user.Password = registerParam.Password
 		user.Save()
 
 		user.Token = cache.GetToken()
 		cache.PutUserToken(user)
 
-		u.Data["json"] = models.TrueData(user)
+		u.SetData(models.TrueData(user))
 	} else {
-		u.Data["json"] = models.FalseData(1000, "账号已经已经注册")
+		u.Data["json"] = models.FalseData(models.StatusAccountExist)
 	}
 
 	fmt.Println(user)
 
 	u.ServeJSON()
-
 }
 
 // @Title 用户登录
@@ -54,9 +59,27 @@ func (u *UserController) Register() {
 // @Failure 403 body is empty
 // @router /login [post]
 func (u *UserController) Login() {
+	// 参数 转为 对象
+	var registerParam UserRegisterParam
+	u.GetParam(&registerParam)
 
-	fmt.Println("UserController -> Login")
-	fmt.Println(u.Ctx.Request.Header)
+	user := models.User{}
+	user.Username = registerParam.Username
+	user.Password = registerParam.Password
+	o := orm.NewOrm()
+	o.Read(&user, "username", "password")
+
+	logs.Debug("o->", user)
+
+	if 0 == user.ID {
+		u.SetData(models.FalseData(models.StatusLoginFailed))
+	} else {
+		user.Token = cache.GetToken()
+		cache.PutUserToken(user)
+		u.SetData(models.TrueData(user))
+	}
+
+	u.ServeJSON()
 }
 
 //// @Title CreateUser
