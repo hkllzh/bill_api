@@ -10,11 +10,12 @@ import (
 	"hkllzh.com/easy-bill/api/cache"
 )
 
-// 用户相关的业务
+// UserController 用户相关的业务
 type UserController struct {
 	EasyBillBaseController
 }
 
+// UserRegisterParam 用户注册参数
 type UserRegisterParam struct {
 	Username string `json:"username"`
 	Password string `json:"password"`

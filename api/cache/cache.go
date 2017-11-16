@@ -29,3 +29,11 @@ func GenerateToken() string {
 	}
 	return string(result)
 }
+
+// GetValue 获取缓存key对应的值
+func getValue(key string) string {
+	if fileCache.IsExist(key) {
+		return string(fileCache.Get(key).([]byte))
+	}
+	return ""
+}

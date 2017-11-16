@@ -1,13 +1,14 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"hkllzh.com/easy-bill/api/models"
-	"github.com/astaxie/beego/logs"
-	"strings"
-	"hkllzh.com/easy-bill/api/cache"
-	"strconv"
 	"encoding/json"
+	"strconv"
+	"strings"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"hkllzh.com/easy-bill/api/cache"
+	"hkllzh.com/easy-bill/api/models"
 )
 
 type EasyBillBaseController struct {
@@ -24,6 +25,7 @@ func (c *EasyBillBaseController) Prepare() {
 	}
 }
 
+// SetData 设置返回值
 func (c *EasyBillBaseController) SetData(data models.ReturnData) {
 	c.Data["json"] = data
 }
@@ -63,13 +65,7 @@ func tokenAuth(c *EasyBillBaseController) bool {
 		return false
 	}
 
-	logs.Debug("token->", "-", token, "-")
-
 	tokens := strings.Split(token, ",")
-
-	logs.Debug("token->", "-", tokens[0], "-")
-	logs.Debug("token->", "-", tokens[1], "-")
-
 	id, err := strconv.Atoi(tokens[0])
 	if nil != err {
 		logs.Error("tokenAuth", err)
@@ -77,7 +73,6 @@ func tokenAuth(c *EasyBillBaseController) bool {
 	}
 	u := models.User{ID: id}
 	cacheToken := cache.GetUserToken(u)
-	logs.Debug("cacheToken->", "-", cacheToken, "-")
 
 	if cacheToken != tokens[1] {
 		return false
