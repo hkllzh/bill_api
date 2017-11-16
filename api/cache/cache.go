@@ -1,11 +1,12 @@
 package cache
 
 import (
+	"fmt"
+	"math/rand"
+	"time"
+
 	"github.com/astaxie/beego/cache"
 	_ "github.com/astaxie/beego/cache/redis"
-	"fmt"
-	"time"
-	"math/rand"
 )
 
 var fileCache cache.Cache
@@ -18,7 +19,7 @@ func init() {
 }
 
 //生成随机字符串
-func GetToken() string {
+func GenerateToken() string {
 	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	bytes := []byte(str)
 	result := []byte{}

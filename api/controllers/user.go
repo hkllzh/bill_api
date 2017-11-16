@@ -4,12 +4,13 @@ import (
 	"hkllzh.com/easy-bill/api/models"
 
 	"fmt"
+
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	"hkllzh.com/easy-bill/api/cache"
-	"github.com/astaxie/beego/logs"
 )
 
-// Operations about Users
+// 用户相关的业务
 type UserController struct {
 	EasyBillBaseController
 }
@@ -39,8 +40,8 @@ func (u *UserController) Register() {
 		user.Password = registerParam.Password
 		user.Save()
 
-		user.Token = cache.GetToken()
-		cache.PutUserToken(user)
+		user.Token = cache.GenerateToken()
+		cache.SetUserToken(user)
 
 		u.SetData(models.TrueData(user))
 	} else {
@@ -74,8 +75,8 @@ func (u *UserController) Login() {
 	if 0 == user.ID {
 		u.SetData(models.FalseData(models.StatusLoginFailed))
 	} else {
-		user.Token = cache.GetToken()
-		cache.PutUserToken(user)
+		user.Token = cache.GenerateToken()
+		cache.SetUserToken(user)
 		u.SetData(models.TrueData(user))
 	}
 

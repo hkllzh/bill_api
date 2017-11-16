@@ -7,11 +7,11 @@ package models
 //}
 
 const (
-	StatusSuccess      = iota
-	StatusUnknownError = 10000 + iota
-	StatusAuthFailed
-	StatusAccountExist
-	StatusLoginFailed
+	StatusSuccess      = 0
+	StatusUnknownError = 10000
+	StatusAuthFailed   = 10001
+	StatusAccountExist = 10002
+	StatusLoginFailed  = 10003
 )
 
 var errMessageCH = map[int]string{
