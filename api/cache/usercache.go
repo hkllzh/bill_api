@@ -15,10 +15,6 @@ import (
 const UserTokenPrefix = "user_token_"
 const UserTokenTimeout = 24 * 60 * 60 * time.Second //time.Duration
 
-func ds() {
-
-}
-
 func SetUserToken(user models.User) {
 
 	key := UserTokenPrefix + strconv.Itoa(user.ID)
