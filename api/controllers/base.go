@@ -18,11 +18,24 @@ type EasyBillBaseController struct {
 func (c *EasyBillBaseController) Prepare() {
 
 	// 需要鉴权 && 不通过
-	if needAuthUrlFilter(c) && !tokenAuth(c) {
+	if needAuthURLFilter(c) && !tokenAuth(c) {
 		c.Data["json"] = models.FalseData(models.StatusAuthFailed)
 		c.ServeJSON()
 		c.StopRun()
 	}
+}
+
+// GetUserID 获取用户id
+func (c *EasyBillBaseController) GetUserID() int {
+	header := c.Ctx.Request.Header
+	token := header.Get("Token")
+	tokens := strings.Split(token, ",")
+	id, err := strconv.Atoi(tokens[0])
+	if nil != err {
+		logs.Error("tokenAuth", err)
+		return 0
+	}
+	return id
 }
 
 // SetData 设置返回值
@@ -30,12 +43,13 @@ func (c *EasyBillBaseController) SetData(data models.ReturnData) {
 	c.Data["json"] = data
 }
 
+// GetParam 获取参数
 func (c *EasyBillBaseController) GetParam(param interface{}) {
 	json.Unmarshal(c.Ctx.Input.RequestBody, param)
 }
 
-// 判断是否需要鉴权
-func needAuthUrlFilter(c *EasyBillBaseController) bool {
+// needAuthURLFilter 判断是否需要鉴权
+func needAuthURLFilter(c *EasyBillBaseController) bool {
 	url := c.Ctx.Request.URL.Path
 	notFilter := []string{
 		"/v1/user/register",
@@ -56,9 +70,6 @@ func tokenAuth(c *EasyBillBaseController) bool {
 	// token 验证
 
 	header := c.Ctx.Request.Header
-
-	logs.Debug(header)
-
 	token := header.Get("Token")
 
 	if "" == token {

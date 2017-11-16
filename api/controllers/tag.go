@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/astaxie/beego/orm"
 	"hkllzh.com/easy-bill/api/models"
 )
 
@@ -16,14 +17,28 @@ type TagAddParam struct {
 
 // @Title 增加标签
 // @Description 增加标签
-// @Param body body models.User true "用户信息"
+// @Param body body controllers.TagAddParam true "用户信息"
 // @Success 200 {int} models.User.Id
 // @Failure 403 body is empty
 // @router /add [post]
 func (c *TagController) Add() {
 	addParam := TagAddParam{}
 	c.GetParam(&addParam)
-	//	c.Data["json"] = models.FalseData(models.StatusLoginFailed)
-	c.SetData(models.TrueData(addParam))
+
+	tag := models.Tag{}
+	tag.UserID = c.GetUserID()
+	tag.Name = addParam.Name
+
+	orm := orm.NewOrm()
+	orm.Read(&tag, "name", "userId")
+
+	if 0 == tag.ID {
+		tag.Save()
+		// c.SetData(models.TrueData(tag))
+		c.SetData(models.NullData())
+	} else {
+		c.SetData(models.FalseData(models.StatusTagExist))
+	}
+
 	c.ServeJSON()
 }
