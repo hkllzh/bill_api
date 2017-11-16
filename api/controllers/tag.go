@@ -18,8 +18,6 @@ type TagAddParam struct {
 // @Title 增加标签
 // @Description 增加标签
 // @Param body body controllers.TagAddParam true "用户信息"
-// @Success 200 {int} models.User.Id
-// @Failure 403 body is empty
 // @router /add [post]
 func (c *TagController) Add() {
 	addParam := TagAddParam{}
