@@ -106,6 +106,8 @@ func (c *BillController) Add() {
 		}
 	}
 
+	o.Commit()
+
 	c.SetData(models.NullData())
 	c.ServeJSON()
 
