@@ -28,6 +28,11 @@ func init() {
 				&controllers.TagController{},
 			),
 		),
+		beego.NSNamespace("/bill",
+			beego.NSInclude(
+				&controllers.BillController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

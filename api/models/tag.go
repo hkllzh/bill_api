@@ -6,9 +6,9 @@ import "github.com/astaxie/beego/orm"
 type Tag struct {
 	EasyBillBaseModel
 	ID        int    `orm:"column(id)" json:"tagId"`
-	UserID    int    `orm:"column(userId)" json:"-"`
-	Name      string `orm:"size(100);column(name)" json:"name"`
-	BillCount int    `orm:"column(bill_count)" json:"billCount"`
+	UserID    int    `orm:"column(userId)" json:"-"`             // 用户id
+	Name      string `orm:"size(100);column(name)" json:"name"`  // 标签名字
+	BillCount int    `orm:"column(bill_count)" json:"billCount"` // 对应的账单数量
 }
 
 // Save 保存对象
