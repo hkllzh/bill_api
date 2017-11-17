@@ -1,8 +1,12 @@
 package controllers
 
-import "hkllzh.com/easy-bill/api/models"
-import "github.com/astaxie/beego/logs"
-import "github.com/astaxie/beego/orm"
+import (
+	"strconv"
+
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/orm"
+	"hkllzh.com/easy-bill/api/models"
+)
 
 // BillController 账单处理 C
 type BillController struct {
@@ -70,15 +74,39 @@ func (c *BillController) Add() {
 	bill.Money = addParam.Money
 	bill.UserID = c.GetUserID()
 	bill.Type = addParam.Type
-	_, billSaveErr := bill.Save()
+	newSaveBillID, billSaveErr := bill.Save()
 
 	// 保存账单
 	if nil != billSaveErr {
-		c.SetData(models.FalseData(models.StatusBillSaveError))
 		o.Rollback()
+
+		c.SetData(models.FalseData(models.StatusBillSaveError))
+		c.ServeJSON()
+		return
 	}
+
+	logs.Debug("newSaveBillID ->", newSaveBillID)
 
 	// 保存（用户 & 标签 & 账单）关系
 
+	for _, i := range canUseTagID {
+		utb := models.UserTagBill{}
+		utb.UserID = c.GetUserID()
+		billID, _ := strconv.Atoi(strconv.FormatInt(newSaveBillID, 10))
+		utb.BillID = billID
+		utb.TagID = i
+
+		_, utbSaveErr := utb.Save()
+		if nil != utbSaveErr {
+			o.Rollback()
+
+			c.SetData(models.FalseData(models.StatusBillSaveError))
+			c.ServeJSON()
+			return
+		}
+	}
+
+	c.SetData(models.NullData())
 	c.ServeJSON()
+
 }
