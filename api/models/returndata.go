@@ -7,21 +7,25 @@ package models
 //}
 
 const (
-	StatusSuccess      = 0
-	StatusUnknownError = 10000
-	StatusAuthFailed   = 10001
-	StatusAccountExist = 10002
-	StatusLoginFailed  = 10003
-	StatusTagExist     = 10004
+	StatusSuccess           = 0
+	StatusUnknownError      = 10000
+	StatusAuthFailed        = 10001
+	StatusAccountExist      = 10002
+	StatusLoginFailed       = 10003
+	StatusTagExist          = 10004
+	StatusBillSaveTypeError = 10005
+	StatusBillSaveError     = 10006
 )
 
 var errMessageCH = map[int]string{
-	StatusSuccess:      "",
-	StatusUnknownError: "未知错误",
-	StatusAuthFailed:   "请求验证失败",
-	StatusAccountExist: "账号已经存在",
-	StatusLoginFailed:  "账号或密码错误",
-	StatusTagExist:     "标签已经存在",
+	StatusSuccess:           "",
+	StatusUnknownError:      "未知错误",
+	StatusAuthFailed:        "请求验证失败",
+	StatusAccountExist:      "账号已经存在",
+	StatusLoginFailed:       "账号或密码错误",
+	StatusTagExist:          "标签已经存在",
+	StatusBillSaveTypeError: "账单保存类型错误",
+	StatusBillSaveError:     "账单保存错误",
 }
 
 type ReturnData struct {

@@ -19,6 +19,8 @@ func init() {
 	orm.RegisterModelWithPrefix("t_", new(models.User))
 	// 注册标签表
 	orm.RegisterModelWithPrefix("t_", new(models.Tag))
+	// 注册账单表
+	orm.RegisterModelWithPrefix("t_", new(models.Bill))
 
 	orm.Debug = true
 

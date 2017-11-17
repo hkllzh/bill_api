@@ -2,6 +2,9 @@ package models
 
 import "github.com/astaxie/beego/orm"
 
+// UnknownTag 定义一个未知标签，如果创建一个账单，但是没有给出标签项目，则使用此标签
+const UnknownTag = "UnknownTag"
+
 // Tag 标签实体类
 type Tag struct {
 	EasyBillBaseModel
