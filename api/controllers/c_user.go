@@ -54,6 +54,12 @@ func (u *UserController) Register() {
 	u.ServeJSON()
 }
 
+// @router /checkLogin [post]
+func (u *UserController) CheckLogin() {
+	u.SetData(models.NullData())
+	u.ServeJSON()
+}
+
 // @Title 用户登录
 // @Description 用户登录
 // @Param loginInfo body controllers.UserRegisterParam true "登录信息"
