@@ -72,18 +72,23 @@ func tokenAuth(c *EasyBillBaseController) bool {
 	header := c.Ctx.Request.Header
 	token := header.Get("Token")
 
+	logs.Debug("token -> ", token)
+
 	if "" == token {
 		return false
 	}
 
 	tokens := strings.Split(token, ",")
+	logs.Debug("tokens -> ", tokens)
 	id, err := strconv.Atoi(tokens[0])
+	logs.Debug("tokens ,id -> ", id)
 	if nil != err {
 		logs.Error("tokenAuth", err)
 		return false
 	}
 	u := models.User{ID: id}
 	cacheToken := cache.GetUserToken(u)
+	logs.Debug("tokens ,cacheToken -> ", cacheToken)
 
 	if cacheToken != tokens[1] {
 		return false
