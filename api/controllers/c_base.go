@@ -9,10 +9,12 @@ import (
 	"github.com/astaxie/beego/logs"
 	"hkllzh.com/easy-bill/api/cache"
 	"hkllzh.com/easy-bill/api/models"
+	"github.com/astaxie/beego/orm"
 )
 
 type EasyBillBaseController struct {
 	beego.Controller
+	ebOrm orm.Ormer
 }
 
 func (c *EasyBillBaseController) Prepare() {
@@ -23,6 +25,9 @@ func (c *EasyBillBaseController) Prepare() {
 		c.ServeJSON()
 		c.StopRun()
 	}
+
+	// create new orm
+	c.ebOrm = orm.NewOrm()
 }
 
 // GetUserID 获取用户id

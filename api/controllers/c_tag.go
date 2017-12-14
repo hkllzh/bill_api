@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/astaxie/beego/orm"
 	"hkllzh.com/easy-bill/api/models"
+	"github.com/astaxie/beego/logs"
 )
 
 // TagController 标签处理 C
@@ -27,8 +28,8 @@ func (c *TagController) Add() {
 	tag.UserID = c.GetUserID()
 	tag.Name = addParam.Name
 
-	orm := orm.NewOrm()
-	orm.Read(&tag, "name", "userId")
+	o := orm.NewOrm()
+	o.Read(&tag, "name", "userId")
 
 	if 0 == tag.ID {
 		tag.Save()
@@ -38,5 +39,19 @@ func (c *TagController) Add() {
 		c.SetData(models.FalseData(models.StatusTagExist))
 	}
 
+	c.ServeJSON()
+}
+
+// @Title 标签列表
+// @Description 标签列表
+// @router /list [post]
+func (c *TagController) List() {
+
+	var ts []*models.Tag
+
+	c.ebOrm.QueryTable("t_tag").Filter("userId", c.GetUserID()).All(&ts)
+	logs.Debug("ts -> ", ts)
+
+	c.SetData(models.TrueData(ts))
 	c.ServeJSON()
 }
